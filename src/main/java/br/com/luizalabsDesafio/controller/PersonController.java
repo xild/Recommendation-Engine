@@ -35,7 +35,7 @@ public class PersonController {
    
 	@Loggable
     @RequestMapping(value="/", params= {"personId", "name", "email"}, method = RequestMethod.POST,headers="Accept=application/json")
-    @ResponseStatus( HttpStatus.OK )
+    @ResponseStatus( HttpStatus.CREATED )
     public  void savePeople(@RequestParam long personId,
 	@RequestParam String name,
 	@RequestParam String email) { 
@@ -47,7 +47,7 @@ public class PersonController {
     public  @ResponseBody Person getPeople(@PathVariable("personId") int personId) { 
 		
     	System.out.println(personId);
-    	return new Person(1L, "xildhc@gmail.com", "Luis Vieira");
+    	return new Person(1L, "Luis Vieira","xildhc@gmail.com");
     
 	}
 	

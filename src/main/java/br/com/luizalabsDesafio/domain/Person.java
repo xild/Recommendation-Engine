@@ -9,17 +9,17 @@ import java.util.Collection;
 
 @NodeEntity
 public class Person {
-    @GraphId private Long id;
+    @GraphId private Long personId;
 
     @Indexed private String name;
     private String email;
 
-    public Long getId() {
-		return id;
+    public Long getPersonId() {
+		return personId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPersonId(Long personId) {
+		this.personId = personId;
 	}
 
 	public void setName(String name) {
@@ -37,9 +37,9 @@ public class Person {
 
   
 
-	public Person(Long id, String name, String email) {
+	public Person(Long personId, String name, String email) {
 		super();
-		this.id = id;
+		this.personId = personId;
 		this.name = name;
 		this.email = email;
 	}

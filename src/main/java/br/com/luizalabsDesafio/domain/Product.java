@@ -21,7 +21,7 @@ public class Product {
 
     private BigDecimal price;
     
-    @Fetch @RelatedToVia(type="VIEWED", direction = Direction.INCOMING) 
+    @RelatedToVia(type="VIEWED", direction = Direction.INCOMING) 
     Collection<Cart> carts;
 
 // end::product[]
