@@ -1,19 +1,25 @@
 package br.com.luizalabsDesafio.domain;
 
+import java.util.Set;
+
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.Collection;
-
 @NodeEntity
 public class Person {
-    @GraphId private Long personId;
+	
+    @GraphId private Long id;
 
-    @Indexed private String name;
+    @Indexed(unique = true)
+    private Long personId;
+    private String name;
     private String email;
 
+    @RelatedTo(type = "VIEWED")
+    Set<Product> products;
+    
     public Long getPersonId() {
 		return personId;
 	}
@@ -30,8 +36,6 @@ public class Person {
 		this.email = email;
 	}
 
-	@RelatedTo(type = "ACTED_IN")
-    Collection<Product> movies;
 
     public Person() { }
 
@@ -52,7 +56,4 @@ public class Person {
         return email;
     }
 
-    public Collection<Product> getMovies() {
-        return movies;
-    }
 }

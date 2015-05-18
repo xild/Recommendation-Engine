@@ -1,13 +1,12 @@
 package br.com.luizalabsDesafio.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +36,6 @@ public class ProductController {
 	private final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 	@Autowired
-	private ProductRepository repo;
-	@Autowired
 	private ProductServices service;
 	
 	@Loggable
@@ -47,8 +44,8 @@ public class ProductController {
 	public void saveProducts(@RequestParam("productId") long productId,
 			@RequestParam("name") String name,
 			@RequestParam("price") BigDecimal price){
-		Product p = new Product(productId, name, price);
-		repo.save(p);
+		
+		service.save(productId, name, price);
 		
 		
 
@@ -60,7 +57,7 @@ public class ProductController {
 	public @ResponseBody Product getProducts(
 			@PathVariable long productId) {
 		
-		return repo.findById(productId);
+		return service.findByProductId(productId);
 	
 	}
 	
@@ -68,16 +65,20 @@ public class ProductController {
 	@RequestMapping(value = "/{productId}", method = RequestMethod.DELETE, headers = "Accept=application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeProducts(@PathVariable long productId) {
-		repo.delete(productId);
+		service.delete(productId);
 	
 	}
 	
 	@Loggable
 	@RequestMapping(value = "", method = RequestMethod.GET, headers = "Accept=application/json")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public @ResponseBody Result<Product> listProducts(
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody List<Product> listProducts(
 			@RequestParam("limit") int limit) {
-			return service.findAll(limit);
-	
+			 List<Product> findAll = service.findAll(limit);
+			 for (Product product : findAll) {
+				System.out.println(product);
 	}
+			 return findAll;
+	}
+	
 }

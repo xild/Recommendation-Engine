@@ -4,6 +4,15 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ReturnableEvaluator;
+import org.neo4j.graphdb.StopEvaluator;
+import org.neo4j.graphdb.Traverser;
+import org.neo4j.graphdb.Traverser.Order;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
@@ -12,7 +21,7 @@ import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 // tag::product[]
 @NodeEntity
-public class Product {
+public class Product  {
     @GraphId Long id;
 
     @Indexed(unique=true) private Long productId;
@@ -21,8 +30,8 @@ public class Product {
 
     private BigDecimal price;
     
-    @RelatedToVia(type="VIEWED", direction = Direction.INCOMING) 
-    Collection<Cart> carts;
+//    @RelatedToVia(type="VIEWED", direction = Direction.INCOMING) 
+//    Collection<Cart> carts;
 
 // end::product[]
 
@@ -50,7 +59,5 @@ public class Product {
 		this.productId = productId;
 	}
 
-	public Collection<Cart> getCarts() {
-        return carts;
-    }
+
 }

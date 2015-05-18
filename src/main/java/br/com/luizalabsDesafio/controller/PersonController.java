@@ -1,10 +1,10 @@
 package br.com.luizalabsDesafio.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.luizalabsDesafio.domain.MyRelationshipType;
 import br.com.luizalabsDesafio.domain.Person;
+import br.com.luizalabsDesafio.services.PersonServices;
 
 import com.jcabi.aspects.Loggable;
 
@@ -22,13 +24,13 @@ import com.jcabi.aspects.Loggable;
 
 /**
  * @author luis vieira
- *
+
  */
 @RestController
 @RequestMapping(value = "v1/peoples")
 public class PersonController {
-//    @Autowired
-//    private PersonService personService;
+    @Autowired
+    private PersonServices personService;
 	private final Logger logger = LoggerFactory.getLogger(PersonController.class);
 
 	
@@ -39,16 +41,14 @@ public class PersonController {
     public  void savePeople(@RequestParam long personId,
 	@RequestParam String name,
 	@RequestParam String email) { 
-    	System.out.println("OK");
+    	personService.save(personId, name, email);
     }
 	
 	@Loggable
     @RequestMapping(value="/{personId}",method = RequestMethod.GET,headers="Accept=application/json")
     public  @ResponseBody Person getPeople(@PathVariable("personId") int personId) { 
 		
-    	System.out.println(personId);
-    	return new Person(1L, "Luis Vieira","xildhc@gmail.com");
-    
+		return personService.findByPersonId(personId);
 	}
 	
 	@Loggable
@@ -56,7 +56,7 @@ public class PersonController {
     @ResponseStatus( HttpStatus.OK )
     public  void  removePeople(@PathVariable("personId") int personId) { 
 		
-    	System.out.println(personId);
+    	personService.delete(personId);
     	
     }
 	
@@ -64,13 +64,45 @@ public class PersonController {
     @RequestMapping(value="",method = RequestMethod.GET,headers="Accept=application/json")
     public  @ResponseBody List<Person> listPeople(@RequestParam("limit")int limit) { 
 
-		System.out.println(limit);
-    	List<Person> persons = new ArrayList<Person>();
-    	Person p = new Person(1L, "xildhc@gmail.com", "Luis Vieira");
-    	persons.add(p);
-    	p = new Person(2L, "juliana@gmail.com", "Juliana Decina");    	
-    	persons.add(p);
-    	return persons;
+    	return personService.findAll(limit);
     
 	}
+	/** *$ curl -X POST http://<host>:<port>/people/{personId}/viewed/{productId}
+	 * */
+	@Loggable
+    @RequestMapping(value="/{personId}/viewed/{productId}",method = RequestMethod.POST,headers="Accept=application/json")
+    public  @ResponseBody void addViewed(@PathVariable long personId, @PathVariable long productId) { 
+			personService.addRelationship(personId, productId, MyRelationshipType.VIEWED);
+    
+	}
+	
+	@Loggable
+    @RequestMapping(value="/{personId}/add-to-cart/{productId}",method = RequestMethod.POST,headers="Accept=application/json")
+    public  @ResponseBody void addToCart(@PathVariable long personId, @PathVariable long productId) { 
+			personService.addRelationship(personId, productId, MyRelationshipType.ADD_TO_CART);
+    
+	}
+	
+	
+	@Loggable
+    @RequestMapping(value="/{personId}/bought/{productId}",method = RequestMethod.POST,headers="Accept=application/json")
+    public  @ResponseBody void addBuy(@PathVariable long personId, @PathVariable long productId) { 
+			personService.addRelationship(personId, productId, MyRelationshipType.BOUGHT);
+    
+	}
+	
+	
+	@Loggable
+    @RequestMapping(value="/actions",method = RequestMethod.GET,headers="Accept=application/json")
+    public  @ResponseBody List<Person> listActions(@RequestParam("limit")int limit) { 
+
+    	return personService.findAll(limit);
+    
+	}
+	
+	
+	
+	
+	
+	
 }
