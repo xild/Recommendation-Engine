@@ -38,7 +38,7 @@ public class PersonServices {
 		if(findAll != null){
 			persons = findAll.as(ArrayList.class);
 		}
-		return limit >= persons.size() ? persons.subList(0, persons.size()-1) : persons.subList(0, limit);
+		return limit >= persons.size() ? persons.subList(0, persons.size()) : persons.subList(0, limit);
 		
 	}
 

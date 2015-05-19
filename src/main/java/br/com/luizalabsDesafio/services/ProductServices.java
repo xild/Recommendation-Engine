@@ -24,7 +24,7 @@ public class ProductServices {
 		if(findAll != null){
 			products = findAll.as(ArrayList.class);
 		}
-		return limit >= products.size() ? products.subList(0, products.size()-1) : products.subList(0, limit);
+		return limit >= products.size() ? products.subList(0, products.size()) : products.subList(0, limit);
 	}
 
 	public void save(long productId, String name, BigDecimal price) {
