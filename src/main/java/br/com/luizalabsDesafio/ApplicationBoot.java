@@ -47,10 +47,14 @@ public class ApplicationBoot extends Neo4jConfiguration {
 		String[] split = neo4j.split("@")[0].substring(7).split(":");
 		String user = split[0];
 		String pwd = split[1];
+		//uncomment if want to use EmbeddedDatabase
+		//return new GraphDatabaseFactory().newEmbeddedDatabase("target/luiza.db");
+
 		return new SpringRestGraphDatabase("http://"+url+"/db/data", user, pwd ) ;
 	}
     public static void main(String[] args) throws IOException {
-//    	  FileUtils.deleteRecursively(new File("target/luiza.db"));
+    	//uncomment if want to use EmbeddedDatabase
+    	//FileUtils.deleteRecursively(new File("target/luiza.db"));
     	 String webPort = System.getenv("PORT");
     	    if (webPort == null || webPort.isEmpty()) {
     	        webPort = "8080";
