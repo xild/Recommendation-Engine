@@ -22,10 +22,10 @@ public interface PersonRepository extends GraphRepository<Person> {
 	@Query(value = "MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN r order by r.time limit 3")
 	List<ActionRelationship> findRelationShip(@Param("0") Long personId);
 	
-	@Query("MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId as personId, endNode(r) as product,  r.time as time, type(r) as type order by r.time limit {1}")
+	@Query("MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId as personId, endNode(r) as product,  r.time as time, type(r) as type order by r.time DESC limit  {1} ")
 	List<CustomRelationshipEntity> findLastActions(@Param("0") Long personId, @Param("1") int limit);
 	
-	@Query("MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId as personId, endNode(r) as product,  r.time as time, type(r) as type order by r.time")
+	@Query("MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId as personId, endNode(r) as product,  r.time as time, type(r) as type order  by r.time DESC")
 	List<CustomRelationshipEntity> findLastActions(@Param("0") Long personId);
     
 }
