@@ -51,6 +51,11 @@ public class ApplicationBoot extends Neo4jConfiguration {
 	}
     public static void main(String[] args) throws IOException {
 //    	  FileUtils.deleteRecursively(new File("target/luiza.db"));
+    	 String webPort = System.getenv("PORT");
+    	    if (webPort == null || webPort.isEmpty()) {
+    	        webPort = "8080";
+    	    }
+    	    System.setProperty("server.port", webPort);
         SpringApplication.run(ApplicationBoot.class, args);
     }
 
