@@ -105,6 +105,15 @@ public class PersonController {
 	}
 	
 	
+	@Loggable
+    @RequestMapping(value="/last-buys/{personId}",method = RequestMethod.GET,headers="Accept=application/json")
+    public  @ResponseBody List<CustomRelationshipEntity> lastBoughts(@PathVariable long personId) { 
+		
+		
+    	return personService.lastBuys(personId);
+    
+	}
+	
 	
 	
 	

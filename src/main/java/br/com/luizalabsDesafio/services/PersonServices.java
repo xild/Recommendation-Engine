@@ -68,5 +68,9 @@ public class PersonServices {
 		
 		
 	}
+
+	public List<CustomRelationshipEntity> lastBuys(long personId) {
+		return personRepo.lastBuys(personId);
+	}
 	
 }

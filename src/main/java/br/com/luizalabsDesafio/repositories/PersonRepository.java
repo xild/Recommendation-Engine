@@ -28,5 +28,10 @@ public interface PersonRepository extends GraphRepository<Person> {
 	@Query("MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId as personId, endNode(r) as product,  r.time as time, type(r) as type order  by r.time DESC")
 	List<CustomRelationshipEntity> findLastActions(@Param("0") Long personId);
     
+	
+	@Query("MATCH (customer:Person{personId: {0}})-[:BOUGHT]->(product:Product)	RETURN type(r) as type,  customer.personId as personId , product as product, r.time as time order by r.time DESC limit 10")
+	List<CustomRelationshipEntity> lastBuys(@Param("0") Long personId);
+	
+	
 }
 
