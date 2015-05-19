@@ -47,7 +47,7 @@ public class ApplicationBoot extends Neo4jConfiguration {
 		String[] split = neo4j.split("@")[0].substring(7).split(":");
 		String user = split[0];
 		String pwd = split[1];
-		return new SpringRestGraphDatabase(url+"/db/data", user, pwd ) ;
+		return new SpringRestGraphDatabase("http://"+url+"/db/data", user, pwd ) ;
 	}
     public static void main(String[] args) throws IOException {
 //    	  FileUtils.deleteRecursively(new File("target/luiza.db"));
