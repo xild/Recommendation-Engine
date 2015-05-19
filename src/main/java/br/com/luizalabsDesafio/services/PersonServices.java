@@ -1,18 +1,20 @@
 package br.com.luizalabsDesafio.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.luizalabsDesafio.domain.MyRelationship;
-import br.com.luizalabsDesafio.domain.MyRelationshipType;
+import br.com.luizalabsDesafio.domain.CustomRelationshipEntity;
+import br.com.luizalabsDesafio.domain.ActionRelationship;
+import br.com.luizalabsDesafio.domain.ProjectRelationshipTypes;
 import br.com.luizalabsDesafio.domain.Person;
 import br.com.luizalabsDesafio.domain.Product;
 import br.com.luizalabsDesafio.repositories.PersonRepository;
@@ -33,27 +35,30 @@ public class PersonServices {
 	}
 
 	public void save(long personId, String name, String email) {
-		// TODO Auto-generated method stub
 		
 		personRepo.save(new Person(personId, name, email));
 	}
 
 	public Person findByPersonId(long personId) {
-		
 		return	personRepo.findByPersonId(personId);
 	}
 
 	public void delete(long personId) {
-		/**TODO 
-		 * handling a better way to return with "query makes no effect on graph"
-		 * */
+		
 		personRepo.delete(findByPersonId(personId));
 	}
 	
-	public void addRelationship(long personId, long productId, MyRelationshipType relType){
+	public void addRelationship(long personId, long productId, ProjectRelationshipTypes relType){
 		Product product = productRepo.findByProductId(productId);
 		Person person = personRepo.findByPersonId(personId);
-		template.save(new MyRelationship(person, product, new Date()), relType);
+		template.save(new ActionRelationship(person, product, new Date()), relType);
+	}
+
+	public List<CustomRelationshipEntity> findActions(long personId, int limit) {
+		 	
+		return limit == 0 ?  personRepo.findLastActions(personId) : personRepo.findLastActions(personId, limit);
+		
+		
 	}
 	
 }

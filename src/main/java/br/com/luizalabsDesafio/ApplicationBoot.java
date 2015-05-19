@@ -2,6 +2,7 @@ package br.com.luizalabsDesafio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.impl.util.FileUtils;
@@ -30,10 +31,11 @@ public class ApplicationBoot extends Neo4jConfiguration {
 
 	@Bean(destroyMethod = "shutdown")
 	public GraphDatabaseService graphDatabaseService() {
-				 
-				 
-		return new SpringRestGraphDatabase("http://localhost:7474/db/data", "neo4j", "lilica89" ) ;
-//		return new GraphDatabaseFactory().newEmbeddedDatabase("target/luiza.db");
+		String login = System.getenv("NEO4J_LOGIN");
+		String pwd = System.getenv("NEO4J_PASSWORD");
+		String url = System.getenv("NEO4J_REST_URL");
+
+		return new SpringRestGraphDatabase(url, login, pwd ) ;
 	}
     public static void main(String[] args) throws IOException {
     	  FileUtils.deleteRecursively(new File("target/luiza.db"));

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,12 @@ public class ProductServices {
 	private ProductRepository productRepo;
 
 	public List<Product> findAll(int limit){
-		return productRepo.findAll().as(ArrayList.class);
+		List<Product> products = new ArrayList<Product>();
+		Result<Product> findAll = productRepo.findAll();
+		if(findAll != null){
+			products = findAll.as(ArrayList.class);
+		}
+		return limit >= products.size() ? products.subList(0, products.size()-1) : products.subList(0, limit);
 	}
 
 	public void save(long productId, String name, BigDecimal price) {
@@ -33,9 +39,12 @@ public class ProductServices {
 	}
 
 	public void delete(long productId) {
-		/**TODO 
-		 * handling a better way to return with "query makes no effect on graph"
-		 * */
 		productRepo.delete(findByProductId(productId));
+	}
+
+
+	public void save(List<Product> products) {
+		products.forEach(p -> productRepo.save(p));
+		
 	}
 }

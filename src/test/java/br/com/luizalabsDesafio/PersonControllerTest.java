@@ -1,134 +1,166 @@
 package br.com.luizalabsDesafio;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.CoreMatchers.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
-import org.junit.Assert;
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.neo4j.repository.GraphRepository;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import br.com.luizalabsDesafio.domain.Person;
 import br.com.luizalabsDesafio.domain.Product;
+import br.com.luizalabsDesafio.services.PersonServices;
+import br.com.luizalabsDesafio.services.ProductServices;
+
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationBoot.class)
 @WebAppConfiguration
-public class PersonControllerTest {
 
-	private MediaType contentType = new MediaType(
-			MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype());
-
-	private MockMvc mockMvc;
-
-	private List<Person> personList = new ArrayList<Person>();
-
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
-
-	long userId;
-	private final String version = "v1";
-
-	@Autowired
-	private WebApplicationContext webApplicationContext;
-
-	// @Autowired
-	// private PersonRepository personRepository;
-
-
-
-	@Autowired
-	public void setConverters(HttpMessageConverter<?>[] converters) {
-
-		this.mappingJackson2HttpMessageConverter = Arrays
-				.asList(converters)
-				.stream()
-				.filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
-				.findAny().get();
-
-		Assert.assertNotNull("the JSON message converter must not be null",
-				this.mappingJackson2HttpMessageConverter);
-	}
-
-	@Before
-	public void setup() throws Exception {
-		this.mockMvc = webAppContextSetup(webApplicationContext).build();
-
-		// this.bookmarkRepository.deleteAllInBatch();
-		// this.accountRepository.deleteAllInBatch();
-
-		// this.account = accountRepository.save(new Account(userName,
-		// "password"));
-		// this.personList.add(bookmarkRepository.save(new Bookmark(account,
-		// "http://bookmark.com/1/" + userName, "A description")));
-		Person p = new Person();
-		p.setEmail("xildhc@gmail.com");
-		p.setPersonId(1L);
-		p.setName("LUIS VIEIRA");
-		this.personList.add(p);
-	}
-
-	@Test
-	public void readSingleBookmark() throws Exception {
-		mockMvc.perform(
-				get("/" + version + "/peoples/"
-						+ this.personList.get(0).getPersonId())).andExpect(status().isOk())
-				.andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("$.personId",is( this.personList.get(0).getPersonId().intValue())))
-				.andExpect(jsonPath("$.name", is("Luis Vieira")))
-				.andExpect(jsonPath("$.email", is("xildhc@gmail.com")));
-	}
+public class PersonControllerTest  {
 	
-	@Autowired Neo4jTemplate template;
-
-	@Test @Transactional
-	  public void persistedProductShouldBeRetrievableFromGraphDb() {
-	    Product notebook = template.save(new Product(1L, "notebook", new BigDecimal(100)));
-	    GraphRepository<Product> productRepository = template.repositoryFor(Product.class);
-	    Product retrievedProduct = productRepository.findBySchemaPropertyValue("id", 1L);
-	    
-	    assertEquals("retrieved Product matches persisted one", notebook, retrievedProduct);
-	    assertEquals("retrieved Product name matches", "notebook", retrievedProduct.getName());
-	  }
 	
-	 @Test
-	    public void createPeople() throws Exception {
-//	        String person = json(new Person(1L, "luis", "xildhc@gmail.com"));
-//	        mockMvc.perform(post("/"+version+"/peoples")
-//	                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//	                .param("name", "luis")
-//	                .param("email", "xildhc@gmail.com")
-//	                .param("personId", "1")).andExpect(status().isCreated())           ;
-	    }
+	private static final String VERSION = "/v1";
+	private static final String PEOPLES = "/peoples";
+	
+	
 
-	    protected String json(Object o) throws IOException {
-	        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
-	        this.mappingJackson2HttpMessageConverter.write(
-	                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-	        return mockHttpOutputMessage.getBodyAsString();
-	    }
+    @Autowired
+    private WebApplicationContext context;
+    
+   
+    private PersonServices personServices;
+    
+    
+    List<Person> persons;
+    
+    @Before
+    public void setUp() {
+    	
+    	
+        RestAssuredMockMvc.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        org.mockito.MockitoAnnotations.initMocks(this);
+        personServices = org.mockito.Mockito.spy(PersonServices.class);
+        persons = new ArrayList<Person>();
+    	
+    	Random ran = new Random();
+    	persons.add(new Person(new Long(ran.nextInt(1000) +1), "Luis Vieira", "luisvieira@gmail.com"));
+     	persons.add(new Person(new Long(ran.nextInt(1000) +1), "Juliana Decina", "julianadecina@yahoo.com"));
+     	persons.add(new Person(new Long(ran.nextInt(1000) +1), "Sueli Plaza", "sueliplaza@gmail.com"));
+        
+    }
+    
+    @Test
+    public void savePeople(){
+    	
+        Person person = persons.get(0);
+        org.mockito.Mockito.doNothing().when(personServices).save(person.getPersonId(), person.getName(), person.getEmail());
+
+       given().
+        	log().
+        		all().
+        			param("personId", person.getPersonId()).
+        			param("email", person.getEmail()).
+        			param("name", person.getName()).
+        				when().post(VERSION+PEOPLES).
+        					then().statusCode(HttpServletResponse.SC_CREATED);
+    }
+    
+    @Test 
+    public void    getPeople() {
+    	
+    	
+    	org.mockito.Mockito.doReturn(new Person(999L, "Luis", "luiscorreavieira@gmail.com")).when(personServices).findByPersonId(999L);
+        given().
+        	log().
+        		all().
+	        			when().get(VERSION+PEOPLES+"/"+999).
+	        						then().
+	        							statusCode(HttpServletResponse.SC_OK).
+	        								contentType("application/json").
+	        									body ("personId",  equalTo (persons.get(0).getPersonId())).
+	        									body ("email", containsString("@") ).
+	        									body("name", isA(String.class));
+    }   
+//    
+//    @Test 
+//    public void     saveBatch() {
+//    	org.mockito.Mockito.doNothing().when(productServices).save(products);
+//
+//        given().
+//        	log().
+//        		all().
+//        			contentType(ContentType.JSON).
+//        				body(products).
+//        					when().post(VERSION+PRODUCTS).
+//        							then().statusCode(HttpServletResponse.SC_CREATED);
+//    
+//    
+//    }
+//    
+//    
+//    @Test 
+//    public void     getProductsLimitZero() {
+//    
+//    	org.mockito.Mockito.doReturn(products).when(productServices).findAll(0);
+//
+//    	int limit = 0;
+//        given().
+//        	param("limit", limit).
+//        		when().get(VERSION+PRODUCTS).
+//        				then().
+//        					statusCode(HttpServletResponse.SC_OK).
+//        						contentType("application/json");
+//    }   
+//    
+//    @Test 
+//    public void   getProductsLimit() {
+//    	int limit = 3;
+//        
+//    	org.mockito.Mockito.doReturn(products).when(productServices).findAll(limit);
+//
+//    	
+//        given().
+//        	log().all().
+//        		param("limit", limit).
+//        			when().get(VERSION+PRODUCTS).
+//        				then().
+//        					statusCode(HttpServletResponse.SC_OK).
+//        					contentType("application/json");
+//    }   
+//    
+//    @Test
+//    public void remove(){
+//    	org.mockito.Mockito.doNothing().when(productServices).delete(products.get(0).getProductId());
+//    	Long productId = products.get(0).getProductId();
+//        given().
+//        when().
+//        delete(VERSION+PRODUCTS+"/"+productId).
+//                
+//        then().log().all().
+//                statusCode(HttpServletResponse.SC_NO_CONTENT).
+//                contentType("application/json");
+//    	
+//    }
+
+
+
 }
