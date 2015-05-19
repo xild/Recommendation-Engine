@@ -40,14 +40,17 @@ public class ApplicationBoot extends Neo4jConfiguration {
 
 		return new SpringRestGraphDatabase(url, login, pwd ) ;*/
 		
-		/**
-		 * HEROKU DEPLOY 
+		/* HEROKU DEPLOY 
 		 * */
-		String url = System.getenv("GRAPHENEDB_URL");
-		return new SpringRestGraphDatabase(url+"/db/data") ;
+		String neo4j = System.getenv("GRAPHENEDB_URL");
+		String url = neo4j.split("@")[1];
+		String[] split = neo4j.split("@")[0].substring(7).split(":");
+		String user = split[0];
+		String pwd = split[1];
+		return new SpringRestGraphDatabase(url+"/db/data", user, pwd ) ;
 	}
     public static void main(String[] args) throws IOException {
-    	  FileUtils.deleteRecursively(new File("target/luiza.db"));
+//    	  FileUtils.deleteRecursively(new File("target/luiza.db"));
         SpringApplication.run(ApplicationBoot.class, args);
     }
 
