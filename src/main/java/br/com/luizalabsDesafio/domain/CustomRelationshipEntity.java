@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.data.neo4j.annotation.QueryResult;
 import org.springframework.data.neo4j.annotation.ResultColumn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @QueryResult
@@ -16,6 +17,10 @@ public class CustomRelationshipEntity {
 	
 	@ResultColumn("personId")
 	private Long personId;
+	
+	@JsonProperty("action")
+	@ResultColumn("type")
+	private String type;
 
 //	@ResultColumn("productId")
 //	private Long productId;
@@ -31,11 +36,8 @@ public class CustomRelationshipEntity {
 	}
 
 	@ResultColumn("time")
+	@JsonIgnore
 	private Date time;
-	
-	@JsonProperty("action")
-	@ResultColumn("type")
-	private String type;
 
 	public Long getPersonId() {
 		return personId;
