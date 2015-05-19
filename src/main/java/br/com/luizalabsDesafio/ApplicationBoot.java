@@ -31,11 +31,20 @@ public class ApplicationBoot extends Neo4jConfiguration {
 
 	@Bean(destroyMethod = "shutdown")
 	public GraphDatabaseService graphDatabaseService() {
-		String login = System.getenv("NEO4J_LOGIN");
+		/**local test
+		 * need to set env vars
+		 * 
+		 * String login = System.getenv("NEO4J_LOGIN");
 		String pwd = System.getenv("NEO4J_PASSWORD");
 		String url = System.getenv("NEO4J_REST_URL");
 
-		return new SpringRestGraphDatabase(url, login, pwd ) ;
+		return new SpringRestGraphDatabase(url, login, pwd ) ;*/
+		
+		/**
+		 * HEROKU DEPLOY 
+		 * */
+		String url = System.getenv("GRAPHENEDB_URL");
+		return new SpringRestGraphDatabase(url+"/db/data") ;
 	}
     public static void main(String[] args) throws IOException {
     	  FileUtils.deleteRecursively(new File("target/luiza.db"));
