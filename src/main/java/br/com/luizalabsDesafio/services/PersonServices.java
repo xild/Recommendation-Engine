@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,14 @@ public class PersonServices {
 	private Neo4jTemplate  template;
 
 	public List<Person> findAll(int limit){
-		return personRepo.findAll().as(ArrayList.class);
+		
+		List<Person> persons = new ArrayList<Person>();
+		Result<Person> findAll = personRepo.findAll();
+		if(findAll != null){
+			persons = findAll.as(ArrayList.class);
+		}
+		return limit >= persons.size() ? persons.subList(0, persons.size()-1) : persons.subList(0, limit);
+		
 	}
 
 	public void save(long personId, String name, String email) {
