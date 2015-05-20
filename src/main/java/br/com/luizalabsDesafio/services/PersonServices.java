@@ -1,23 +1,22 @@
 package br.com.luizalabsDesafio.services;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.luizalabsDesafio.domain.CustomRelationshipEntity;
 import br.com.luizalabsDesafio.domain.ActionRelationship;
-import br.com.luizalabsDesafio.domain.ProjectRelationshipTypes;
+import br.com.luizalabsDesafio.domain.CustomRelationshipEntity;
 import br.com.luizalabsDesafio.domain.Person;
 import br.com.luizalabsDesafio.domain.Product;
+import br.com.luizalabsDesafio.domain.ProjectRelationshipTypes;
 import br.com.luizalabsDesafio.repositories.PersonRepository;
 import br.com.luizalabsDesafio.repositories.ProductRepository;
 @Service
@@ -33,13 +32,12 @@ public class PersonServices {
 
 	public List<Person> findAll(int limit){
 		
-		List<Person> persons = new ArrayList<Person>();
-		Result<Person> findAll = personRepo.findAll();
-		if(findAll != null){
-			persons = findAll.as(ArrayList.class);
+		if(limit == 0){
+			return personRepo.findAll().as(ArrayList.class);
 		}
-		return limit >= persons.size() ? persons.subList(0, persons.size()) : persons.subList(0, limit);
+		Page<Person> findAll = personRepo.findAll(new PageRequest(0, limit));
 		
+		return findAll.getContent();
 	}
 
 	public void save(long personId, String name, String email) {

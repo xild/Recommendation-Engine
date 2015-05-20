@@ -1,0 +1,150 @@
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:apigee="http://api.apigee.com/wadl/2010/07/" xmlns="http://wadl.dev.java.net/2009/02" xsi:schemaLocation="http://wadl.dev.java.net/2009/02 http://apigee.com/schemas/wadl-schema.xsd http://api.apigee.com/wadl/2010/07/ http://apigee.com/schemas/apigee-wadl-extensions.xsd">
+<!--
+ Base defines the domain and base path of the endpoint 
+-->
+<resources base="https://xildations.herokuapp.com">
+<resource path="/v1/peoples/{personId}">
+<method id="removePeople" name="DELETE">
+<doc title="PersonController.removePeople"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="personId" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+<method id="getPeople" name="GET">
+<doc title="PersonController.getPeople"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="personId" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples">
+<method id="savePeople" name="POST">
+<doc title="PersonController.savePeople"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="query" type="" default="" required="true"/>
+<param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="" style="query" type="xs:string" default="" required="true"/>
+<param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="" style="query" type="xs:string" default="" required="true"/>
+</request>
+<response status="201">
+<representation mediaType="application/json"/>
+</response>
+</method>
+<method id="listPeople" name="GET">
+<doc title="PersonController.listPeople"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="limit" style="query" type="" default="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples/{personId}/viewed/{productId}">
+<method id="addViewed" name="POST">
+<doc title="PersonController.addViewed"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples/{personId}/add-to-cart/{productId}">
+<method id="addToCart" name="POST">
+<doc title="PersonController.addToCart"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples/{personId}/actions">
+<method id="listActions" name="GET">
+<doc title="PersonController.listActions"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="limit" style="query" type="" default="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples/{personId}/bought/{productId}">
+<method id="addBuy" name="POST">
+<doc title="PersonController.addBuy"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/peoples/last-buys/{personId}">
+<method id="lastBoughts" name="GET">
+<doc title="PersonController.lastBoughts"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+<resource path="/v1/products">
+<method id="listProducts" name="GET">
+<doc title="ProductController.listProducts"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="limit" style="query" type="" default="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+<method id="saveProducts" name="POST">
+<doc title="ProductController.saveProducts"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="productId" style="query" type="" default="" required="true"/>
+<param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="name" style="query" type="xs:string" default="" required="true"/>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="price" style="query" type="" default="" required="true"/>
+</request>
+</method>
+<method id="saveBatch" name="POST">
+<doc title="ProductController.saveBatch"/>
+</method>
+</resource>
+<resource path="/v1/products/{productId}">
+<method id="getProducts" name="GET">
+<doc title="ProductController.getProducts"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="200">
+<representation mediaType="application/json"/>
+</response>
+</method>
+<method id="removeProducts" name="DELETE">
+<doc title="ProductController.removeProducts"/>
+<request>
+<ns2:param xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" name="" style="template" type="" required="true"/>
+</request>
+<response status="204">
+<representation mediaType="application/json"/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

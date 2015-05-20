@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.verify;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class ProductControllerTest  {
     @Autowired
     private WebApplicationContext context;
     
-    @InjectMocks
+    @Mock
     private ProductController productController;
     
     
@@ -94,7 +96,7 @@ public class ProductControllerTest  {
     @Test 
     public void     getProducts() {
     	
-    	org.mockito.Mockito.doReturn(new Product(99779L, "notebook", new BigDecimal(10))).when(productServices).findByProductId(99779L);
+    	org.mockito.Mockito.doReturn(new Product(99779L, "notebook", new BigDecimal(10))).when(productController).getProducts(anyLong());
        
 
         given().

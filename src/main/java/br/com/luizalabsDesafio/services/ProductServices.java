@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.luizalabsDesafio.domain.Person;
 import br.com.luizalabsDesafio.domain.Product;
 import br.com.luizalabsDesafio.repositories.ProductRepository;
 @Service
@@ -19,12 +22,13 @@ public class ProductServices {
 	private ProductRepository productRepo;
 
 	public List<Product> findAll(int limit){
-		List<Product> products = new ArrayList<Product>();
-		Result<Product> findAll = productRepo.findAll();
-		if(findAll != null){
-			products = findAll.as(ArrayList.class);
+		
+		if(limit == 0){
+			return productRepo.findAll().as(ArrayList.class);
 		}
-		return limit >= products.size() ? products.subList(0, products.size()) : products.subList(0, limit);
+		Page<Product> findAll = productRepo.findAll(new PageRequest(0, limit));
+		
+		return findAll.getContent();
 	}
 
 	public void save(long productId, String name, BigDecimal price) {
