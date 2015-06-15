@@ -22,23 +22,20 @@ public class ProductServices {
 	private ProductRepository productRepo;
 
 	public List<Product> findAll(int limit){
-		
 		if(limit == 0){
 			return productRepo.findAll().as(ArrayList.class);
 		}
-		Page<Product> findAll = productRepo.findAll(new PageRequest(0, limit));
 		
+		Page<Product> findAll = productRepo.findAll(new PageRequest(0, limit));
 		return findAll.getContent();
 	}
 
 	public void save(long productId, String name, BigDecimal price) {
-		// TODO Auto-generated method stub
 		Product p = new Product(productId, name, price);
 		productRepo.save(p);
 	}
 
 	public Product findByProductId(long productId) {
-		
 		return	productRepo.findByProductId(productId);
 	}
 
@@ -49,6 +46,5 @@ public class ProductServices {
 
 	public void save(List<Product> products) {
 		products.forEach(p -> productRepo.save(p));
-		
 	}
 }

@@ -34,23 +34,23 @@ public class ApplicationBoot extends Neo4jConfiguration {
 		/**local test
 		 * need to set env vars
 		 * */
-//		String login = System.getenv("NEO4J_LOGIN");
-//		String pwd = System.getenv("NEO4J_PASSWORD");
-//		String url = System.getenv("NEO4J_REST_URL");
+		String login = System.getenv("NEO4J_LOGIN");
+		String pwd = System.getenv("NEO4J_PASSWORD");
+		String url = System.getenv("NEO4J_REST_URL");
 
-//		return new SpringRestGraphDatabase(url, login, pwd ) ;
+		return new SpringRestGraphDatabase(url, login, pwd ) ;
 		
 		/* HEROKU DEPLOY 
 		 * */
-		String neo4j = System.getenv("GRAPHENEDB_URL");
-		String url = neo4j.split("@")[1];
-		String[] split = neo4j.split("@")[0].substring(7).split(":");
-		String user = split[0];
-		String pwd = split[1];
+//		String neo4j = System.getenv("GRAPHENEDB_URL");
+//		String url = neo4j.split("@")[1];
+//		String[] split = neo4j.split("@")[0].substring(7).split(":");
+//		String user = split[0];
+//		String pwd = split[1];
 		//uncomment if want to use EmbeddedDatabase
 		//return new GraphDatabaseFactory().newEmbeddedDatabase("target/luiza.db");
 
-		return new SpringRestGraphDatabase("http://"+url+"/db/data", user, pwd ) ;
+//		return new SpringRestGraphDatabase("http://"+url+"/db/data", user, pwd ) ;
 	}
     public static void main(String[] args) throws IOException {
     	//uncomment if want to use EmbeddedDatabase

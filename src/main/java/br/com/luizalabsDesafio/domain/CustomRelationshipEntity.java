@@ -11,10 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @QueryResult
 public class CustomRelationshipEntity {
 	
-	
-//	@Query("MATCH (person {personId: 1})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person.personId, endNode(r).productId,  r.time, type(r) order by r.time limit 3")
-
-	
 	@ResultColumn("personId")
 	private Long personId;
 	
@@ -22,18 +18,9 @@ public class CustomRelationshipEntity {
 	@ResultColumn("type")
 	private String type;
 
-//	@ResultColumn("productId")
-//	private Long productId;
 	@ResultColumn("product")
 	private Product product;
 
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
 
 	@ResultColumn("time")
 	@JsonIgnore
@@ -46,14 +33,6 @@ public class CustomRelationshipEntity {
 	public void setPersonId(Long personId) {
 		this.personId = personId;
 	}
-//
-//	public Long getProductId() {
-//		return productId;
-//	}
-
-//	public void setProductId(Long productId) {
-//		this.productId = productId;
-//	}
 
 	public Date getTime() {
 		return time;
@@ -71,6 +50,13 @@ public class CustomRelationshipEntity {
 		this.type = type;
 	}
 	
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
 	
 	
 }

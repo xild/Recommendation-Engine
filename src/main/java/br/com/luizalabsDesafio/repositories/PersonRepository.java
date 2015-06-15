@@ -17,7 +17,7 @@ import br.com.luizalabsDesafio.domain.Person;
 
 public interface PersonRepository extends GraphRepository<Person> {
     // the "0" parameter is a workaround for a bug in SDN
-	Person findByPersonId(@Param("0") Long personId);
+	Person findByPersonId(Long personId);
 	
 	@Query(value = "MATCH (person {personId: {0}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN r order by r.time limit 3")
 	List<ActionRelationship> findRelationShip(@Param("0") Long personId);

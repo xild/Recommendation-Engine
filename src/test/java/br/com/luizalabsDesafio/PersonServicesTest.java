@@ -49,10 +49,6 @@ public class PersonServicesTest {
 		persons = new ArrayList<Person>();
 		persons.add(new Person(1L, "LUIS", "xildhc@gmail.com"));
 		persons.add(new Person(2L, "Juliana", "julianadecia@yahoo.com"));
-		org.mockito.Mockito.when(services.findByPersonId(anyLong()))
-				.thenReturn(persons.get(0));
-		
-		
 	}
 
 	@Test
@@ -66,35 +62,30 @@ public class PersonServicesTest {
 
 	@Test
 	public void getPeople() throws Exception {
-		org.mockito.Mockito.when(services.findByPersonId(anyLong()))
-		.thenReturn(persons.get(0));
-		
+		org.mockito.Mockito
+				.when(services.findByPersonId(anyLong()))
+				.thenReturn(persons.get(0));
 		Person findByPersonId = services.findByPersonId(0L);
 		assertEquals(persons.get(0), findByPersonId);
 	}
 	
 	@Test
 	public void listPeopleByLimit() throws Exception {
-		
 		org.mockito.Mockito
-		.doReturn(persons.subList(0, 1))
-		.when(services).findAll(1);
+			.doReturn(persons.subList(0, 1))
+			.when(services).findAll(1);
 		List<Person> findAll = services.findAll(1);
-		
 		assertEquals(1, findAll.size());
 		
-		}
+	}
 
 	@Test
 	public void listPeopleByLimitZero() throws Exception{
-
 		org.mockito.Mockito
-		.doReturn(persons)
-		.when(services).findAll(0);
+			.doReturn(persons)
+			.when(services).findAll(0);
 		List<Person> findAll = services.findAll(0);
-		
 		assertEquals(2, findAll.size());
-		
 	}
 
 }	

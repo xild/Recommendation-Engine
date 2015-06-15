@@ -25,15 +25,9 @@ public class Product  {
     @GraphId Long id;
 
     @Indexed(unique=true) private Long productId;
-
     private String name;
 
     private BigDecimal price;
-    
-//    @RelatedToVia(type="VIEWED", direction = Direction.INCOMING) 
-//    Collection<Cart> carts;
-
-// end::product[]
 
     public Product() { }
     
@@ -42,6 +36,7 @@ public class Product  {
     	this.name = name;
     	this.price = price;
     }
+    
     public Long getProductId() {
         return productId;
     }

@@ -18,31 +18,12 @@ public class Person {
 
     @Indexed(unique = true)
     private Long personId;
+
     private String name;
+    
     private String email;
 
-//    @Fetch @RelatedToVia(type="VIEWED", direction=Direction.BOTH)
-//    @JsonProperty("VIEWED")
-//    private Set<MyRelationship> relationShipViewed;
-//	
-//
-//    @Fetch @RelatedToVia(type="BOUGHT", direction=Direction.BOTH)
-//    @JsonProperty("BOUGHT")
-//    private Set<MyRelationship> relationShipBought;
-//    
-//	@Fetch @RelatedToVia(type="ADD_TO_CART",direction=Direction.BOTH)
-//	@JsonProperty("ADD-TO-CART")
-//    private Set<MyRelationship> relationShipAddToCart;
-    
-
-//	@Query(value = "MATCH (person {personId: {personId}})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person, r order by r.time limit 3",
-//            params = {"personId"})
-////    $MATCH (person {personId: 1})-[r:VIEWED|BOUGHT|ADD_TO_CART]->() RETURN person, r order by r.time limit 3
-//    private List<MyRelationship> friends;
-    
 	public Person() { }
-
-    
 
 	public Person(Long personId, String name, String email) {
 		super();
@@ -50,26 +31,6 @@ public class Person {
 		this.name = name;
 		this.email = email;
 	}
-
-	
-
-    
-//    public Set<MyRelationship> getRelationShipViewed() {
-//		return relationShipViewed;
-//	}
-//
-//
-//
-//	public Set<MyRelationship> getRelationShipBought() {
-//		return relationShipBought;
-//	}
-//
-//
-//
-//	public Set<MyRelationship> getRelationShipAddToCart() {
-//		return relationShipAddToCart;
-//	}
-
 
 	public Long getPersonId() {
 		return personId;
@@ -86,8 +47,6 @@ public class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
 
 	public String getName() {
         return name;

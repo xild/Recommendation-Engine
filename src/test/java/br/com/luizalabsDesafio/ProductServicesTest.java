@@ -53,10 +53,6 @@ public class ProductServicesTest {
 		products.add(new Product(2L, "Tablet Acer 2014", new java.math.BigDecimal(1400)));
 		products.add(new Product(1L, "Geladeira Brastemp 2014", new java.math.BigDecimal(800)));
 		products.add(new Product(1L, "Mesa retangular", new java.math.BigDecimal(200)));
-		//		org.mockito.Mockito.when(services.findByPersonId(anyLong()))
-//				.thenReturn(persons.get(0));
-		
-		
 	}
 
 	@Test
@@ -70,35 +66,30 @@ public class ProductServicesTest {
 
 	@Test
 	public void getPeople() throws Exception {
-		org.mockito.Mockito.when(services.findByProductId(anyLong()))
-		.thenReturn(products.get(0));
-		
+		org.mockito.Mockito
+			.when(services.findByProductId(anyLong()))
+			.thenReturn(products.get(0));
 		Product productById = services.findByProductId(1L);
 		assertEquals(products.get(0), productById);
 	}
 	
 	@Test
 	public void listPeopleByLimit() throws Exception {
-		
 		org.mockito.Mockito
-		.doReturn(products.subList(0, 2))
-		.when(services).findAll(2);
+			.doReturn(products.subList(0, 2))
+			.when(services).findAll(2);
 		List<Product> findAll = services.findAll(2);
-		
 		assertEquals(2, findAll.size());
-		
-		}
+	}
 
 	@Test
 	public void listPeopleByLimitZero() throws Exception{
 
 		org.mockito.Mockito
-		.doReturn(products)
-		.when(services).findAll(0);
+			.doReturn(products)
+			.when(services).findAll(0);
 		List<Product> findAll = services.findAll(0);
-		
 		assertEquals(4, findAll.size());
-		
 	}
 
 }	

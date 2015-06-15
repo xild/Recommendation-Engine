@@ -25,23 +25,24 @@ public class PersonServices {
 	
 	@Autowired 
 	private PersonRepository personRepo;
+	
 	@Autowired
 	private ProductRepository productRepo;
+	
 	@Autowired
 	private Neo4jTemplate  template;
 
 	public List<Person> findAll(int limit){
-		
 		if(limit == 0){
 			return personRepo.findAll().as(ArrayList.class);
 		}
+	
 		Page<Person> findAll = personRepo.findAll(new PageRequest(0, limit));
 		
 		return findAll.getContent();
 	}
 
 	public void save(long personId, String name, String email) {
-		
 		personRepo.save(new Person(personId, name, email));
 	}
 
@@ -50,7 +51,6 @@ public class PersonServices {
 	}
 
 	public void delete(long personId) {
-		
 		personRepo.delete(findByPersonId(personId));
 	}
 	
@@ -61,10 +61,7 @@ public class PersonServices {
 	}
 
 	public List<CustomRelationshipEntity> findActions(long personId, int limit) {
-		 	
 		return limit == 0 ?  personRepo.findLastActions(personId) : personRepo.findLastActions(personId, limit);
-		
-		
 	}
 
 	public List<CustomRelationshipEntity> lastBuys(long personId) {
