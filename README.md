@@ -40,7 +40,7 @@ Simples sistemas de recomendação. Para a iteração com o sistema de recomenda
 - Pessoa adiciona ao carrinho um Produto
   - curl -X POST https://hostName:port/v1/peoples/{ personId}/add-to-cart/{productId}
   
- - Pessoa compra um Produto
+- Pessoa compra um Produto
   - curl -X POST https://hostName:port/v1/peoples/{personId}/bought/{productId}
   
 - Últimas ações de uma pessoa
